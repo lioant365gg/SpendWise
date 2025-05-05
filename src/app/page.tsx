@@ -174,14 +174,14 @@ export default function Home() {
   // --- Rendering ---
 
   return (
-    <main className="container mx-auto p-4 md:p-8 max-w-3xl"> {/* Increased max-width */}
+    <main className="container mx-auto p-4 md:p-8 max-w-3xl"> {/* Increased max-width and responsive padding */}
       <Card className="mb-8 shadow-lg border-primary border-2">
         <CardHeader className="bg-primary text-primary-foreground rounded-t-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <CardTitle className="text-xl sm:text-2xl md:text-3xl mb-2 sm:mb-0">
             SpendWise Grocery List
           </CardTitle>
            {isClient && lists.length > 0 && currentListId && (
-             <div className="flex flex-wrap items-center gap-2 justify-end w-full sm:w-auto">
+             <div className="flex flex-wrap items-center gap-2 justify-end w-full sm:w-auto mt-2 sm:mt-0"> {/* Added mt-2 sm:mt-0 for spacing */}
               <ListSelector
                 lists={lists}
                 currentListId={currentListId}
@@ -189,18 +189,18 @@ export default function Home() {
               />
               <Button
                 variant="secondary"
-                size="sm"
+                size="sm" // Use smaller button size
                 onClick={() => setIsCreateListDialogOpen(true)}
-                className="shrink-0"
+                className="shrink-0" // Prevent shrinking
               >
                 <Plus className="mr-1 h-4 w-4" /> New List
               </Button>
               {currentList && ( // Only show download if a list is selected
                  <Button
                     variant="outline"
-                    size="sm"
+                    size="sm" // Use smaller button size
                     onClick={handleDownloadPdf}
-                    className="shrink-0"
+                    className="shrink-0" // Prevent shrinking
                     disabled={!isClient || !currentList} // Disable during SSR or if no list
                   >
                     <Download className="mr-1 h-4 w-4" /> PDF
@@ -209,7 +209,7 @@ export default function Home() {
              </div>
            )}
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-4 md:p-6"> {/* Responsive padding */}
            {isClient && !currentList && lists.length > 0 && (
              <p className="text-center text-muted-foreground mb-6">
                Select a list or create a new one to start adding items.

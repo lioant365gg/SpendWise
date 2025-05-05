@@ -57,13 +57,13 @@ export function GroceryItemForm({ onAddItem }: GroceryItemFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end mb-6 p-4 bg-secondary rounded-lg shadow"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end mb-6 p-4 bg-secondary rounded-lg shadow" // Responsive grid
       >
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem className="sm:col-span-2"> {/* Adjust column span */}
+            <FormItem className="sm:col-span-2 lg:col-span-1"> {/* Responsive column span */}
               <FormLabel>Item Name</FormLabel>
               <FormControl>
                 <Input placeholder="e.g., Apples" {...field} />
@@ -76,7 +76,7 @@ export function GroceryItemForm({ onAddItem }: GroceryItemFormProps) {
           control={form.control}
           name="quantity"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="lg:col-span-1"> {/* Responsive column span */}
               <FormLabel>Quantity</FormLabel>
               <FormControl>
                 <Input placeholder="e.g., 2 lbs" {...field} />
@@ -89,7 +89,7 @@ export function GroceryItemForm({ onAddItem }: GroceryItemFormProps) {
           control={form.control}
           name="price"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="lg:col-span-1"> {/* Responsive column span */}
               <FormLabel>Price ($)</FormLabel>
               <FormControl>
                 <Input
@@ -108,7 +108,7 @@ export function GroceryItemForm({ onAddItem }: GroceryItemFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="sm:col-start-4"> {/* Adjust button position */}
+        <Button type="submit" className="sm:col-span-2 lg:col-span-1 w-full sm:w-auto lg:justify-self-end"> {/* Responsive button width and placement */}
           <PlusCircle className="mr-2 h-4 w-4" /> Add Item
         </Button>
       </form>

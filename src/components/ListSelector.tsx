@@ -28,10 +28,10 @@ export function ListSelector({
 
   return (
     <Select value={currentListId} onValueChange={onSelectList}>
-      <SelectTrigger className="w-[180px] sm:w-[200px] md:w-[250px] text-sm h-9"> {/* Adjust width and height */}
-         <List className="mr-2 h-4 w-4 text-muted-foreground" /> {/* Optional icon */}
-        <SelectValue placeholder="Select a list" />
-      </SelectTrigger>
+       <SelectTrigger className="w-full sm:w-[180px] md:w-[200px] text-sm h-9"> {/* Responsive width */}
+         <List className="mr-2 h-4 w-4 text-muted-foreground shrink-0" /> {/* Optional icon, prevent shrinking */}
+         <SelectValue placeholder="Select a list" className="truncate" /> {/* Truncate long list names */}
+       </SelectTrigger>
       <SelectContent>
         {lists.map((list) => (
           <SelectItem key={list.id} value={list.id}>
