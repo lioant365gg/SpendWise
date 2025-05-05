@@ -11,7 +11,8 @@ import { CreateListDialog } from '@/components/CreateListDialog'; // New compone
 import type { GroceryItem, GroceryListType, AppData } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Download } from 'lucide-react';
+import { generateGroceryListPdf } from '@/lib/pdf-utils'; // Import PDF utility
 
 
 const LOCAL_STORAGE_KEY = 'spendwise_app_data_v3'; // Updated key for new structure
@@ -95,8 +96,6 @@ export default function Home() {
     setCurrentListId(id);
   };
 
-  // Optional: Add handleRenameList, handleDeleteList later if needed
-
   // --- Item Management (for the current list) ---
 
   const handleAddItem = (newItemData: Omit<GroceryItem, 'id' | 'bought'>) => {
@@ -163,17 +162,26 @@ export default function Home() {
     return currentItems.reduce((total, item) => total + (item.price || 0), 0);
   }, [currentItems, currentList]); // Depend on currentItems
 
+
+  // --- PDF Download ---
+  const handleDownloadPdf = useCallback(() => {
+    if (currentList && isClient) {
+      generateGroceryListPdf(currentList.name, currentItems, totalSpend);
+    }
+  }, [currentList, currentItems, totalSpend, isClient]);
+
+
   // --- Rendering ---
 
   return (
     <main className="container mx-auto p-4 md:p-8 max-w-3xl"> {/* Increased max-width */}
       <Card className="mb-8 shadow-lg border-primary border-2">
-        <CardHeader className="bg-primary text-primary-foreground rounded-t-lg p-4 flex flex-row justify-between items-center">
-          <CardTitle className="text-xl sm:text-2xl md:text-3xl">
+        <CardHeader className="bg-primary text-primary-foreground rounded-t-lg p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <CardTitle className="text-xl sm:text-2xl md:text-3xl mb-2 sm:mb-0">
             SpendWise Grocery List
           </CardTitle>
            {isClient && lists.length > 0 && currentListId && (
-             <div className="flex items-center gap-2">
+             <div className="flex flex-wrap items-center gap-2 justify-end w-full sm:w-auto">
               <ListSelector
                 lists={lists}
                 currentListId={currentListId}
@@ -183,10 +191,21 @@ export default function Home() {
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsCreateListDialogOpen(true)}
-                className="ml-auto shrink-0" // Prevent button from growing too large
+                className="shrink-0"
               >
                 <Plus className="mr-1 h-4 w-4" /> New List
               </Button>
+              {currentList && ( // Only show download if a list is selected
+                 <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownloadPdf}
+                    className="shrink-0"
+                    disabled={!isClient || !currentList} // Disable during SSR or if no list
+                  >
+                    <Download className="mr-1 h-4 w-4" /> PDF
+                 </Button>
+               )}
              </div>
            )}
         </CardHeader>
