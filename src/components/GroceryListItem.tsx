@@ -35,7 +35,7 @@ export function GroceryListItem({
         item.bought ? 'bg-secondary opacity-60' : 'bg-card'
       )}
     >
-      <div className="flex items-center gap-4 flex-grow">
+      <div className="flex items-center gap-4 flex-grow min-w-0"> {/* Added min-w-0 */}
         <Checkbox
           id={`item-${item.id}`}
           checked={item.bought}
@@ -46,17 +46,20 @@ export function GroceryListItem({
         <Label
           htmlFor={`item-${item.id}`}
           className={cn(
-            'flex-grow cursor-pointer',
+            'flex-grow cursor-pointer truncate', // Added truncate
             item.bought && 'line-through text-muted-foreground'
           )}
         >
           <span className="font-medium">{item.name}</span>
+          <span className={cn("text-xs text-muted-foreground ml-2", item.bought && 'text-muted-foreground/80')}>
+            ({item.quantity}) {/* Display quantity */}
+          </span>
         </Label>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 ml-4"> {/* Added margin */}
         <span
           className={cn(
-            'font-mono text-right w-20',
+            'font-mono text-right w-20 shrink-0', // Added shrink-0
             item.bought && 'line-through text-muted-foreground'
           )}
         >
@@ -67,7 +70,7 @@ export function GroceryListItem({
           size="icon"
           onClick={handleDeleteClick}
           aria-label={`Delete ${item.name}`}
-          className="text-destructive hover:bg-destructive/10"
+          className="text-destructive hover:bg-destructive/10 shrink-0" // Added shrink-0
         >
           <Trash2 className="h-4 w-4" />
         </Button>

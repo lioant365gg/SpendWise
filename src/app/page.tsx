@@ -9,7 +9,7 @@ import { TotalSpend } from '@/components/TotalSpend';
 import type { GroceryItem } from '@/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const LOCAL_STORAGE_KEY = 'spendwise_grocery_list';
+const LOCAL_STORAGE_KEY = 'spendwise_grocery_list_v2'; // Updated key for new structure
 
 export default function Home() {
   const [items, setItems] = useState<GroceryItem[]>([]);
@@ -22,11 +22,17 @@ export default function Home() {
     if (storedItems) {
       try {
         const parsedItems = JSON.parse(storedItems);
-        // Basic validation
-        if (Array.isArray(parsedItems) && parsedItems.every(item => 'id' in item && 'name' in item && 'price' in item && 'bought' in item)) {
+        // Updated validation to include quantity
+        if (Array.isArray(parsedItems) && parsedItems.every(item =>
+            'id' in item &&
+            'name' in item &&
+            'price' in item &&
+            'quantity' in item && // Check for quantity
+            'bought' in item)) {
           setItems(parsedItems);
         } else {
-          console.error("Invalid data format in local storage.");
+          console.error("Invalid data format in local storage (v2). Clearing.");
+          // Optionally, try migrating from old format if needed
           localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear invalid data
         }
       } catch (error) {
@@ -45,7 +51,7 @@ export default function Home() {
 
   const handleAddItem = (newItem: Omit<GroceryItem, 'id' | 'bought'>) => {
     const itemToAdd: GroceryItem = {
-      ...newItem,
+      ...newItem, // Includes name, price, and quantity now
       id: uuidv4(), // Generate unique ID
       bought: false,
     };
